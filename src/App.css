@@ -4,10 +4,9 @@
   box-sizing: border-box;
 }
 
-.App{
-  display: block;
+.app{
+  display: flex;
   height: 500px;
   width: 500px;
-  align-items: center;
-  justify-content: center;
+  margin: 1.5rem auto;
 }
