@@ -18,7 +18,7 @@ function App() {
   var moves = null
   var moveNum = 0;
   var yourMoveNum = 0;
-  var csv = "0008,r6k/pp2r2p/4Rp1Q/3p4/8/1N1P2R1/PqP2bPP/7K b - - 0 24,f2g3 e6e7 b2b1 b3c1 b1c1 h6c1,1758,75,94,4412,crushing hangingPiece long middlegame,https://lichess.org/787zsVup/black#48,"
+  var csv = "004JD,3r4/R7/2p5/p1P2p2/1p4k1/nP6/P2KNP2/8 w - - 3 41,d2e3 a3c2,1127,77,97,310,endgame mate mateIn1 oneMove,https://lichess.org/6vTeEc3x#81,"
   var parsedCSV = parse(csv)
 
   const root = ReactDOM.createRoot(document.getElementById('root'));
