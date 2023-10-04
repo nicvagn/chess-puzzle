@@ -1,28 +1,31 @@
 import './App.css';
-import {useState} from 'react'
 import { Chessboard } from 'react-chessboard';
 import { Chess } from 'chess.js'
 
 
 function App() {
-  var rightSquare;
+  var rightDest = 'a4';
+  var rightSource = "a2";
+  var fen = null;
 
-  const game = new Chess(
-    'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2'
-  )
+  const game = new Chess()
     //when a user drops a piece
     function onDrop(source,target){
-      if(target !== rightSquare){
-        return true
+      console.log("drop")
+      if(source === rightSource){
+        console.log("right source")
+          if(target === rightDest){
+            console.log("right dest")
+            return true
+          }
       }
+      console.log("wrong")
       return false
-
   }
   return (
     <div className="app">
       <Chessboard position={game.fen()} onPieceDrop={onDrop}/>;
     </div>
-
   );
 }
 
