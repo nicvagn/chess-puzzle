@@ -14,8 +14,8 @@ import * as ReactDOM from 'react-dom/client';
 function App() {
   var fen = null;
   var moves = null;
-  var moveNum = 0;
-  var yourMoveNum = 0;
+  var moveNum = 1; // = 1 b/c first move is made by initPuzzle
+  var yourMoveNum = 1;
   var rightDest;
   var rightSource;
 
@@ -32,7 +32,7 @@ function App() {
   const puzzle = new Chess(fen)
 
   //parse the puzzle moves from string
-  function parseMoves(m){
+  function parseMoves(m) {
     var parsed = m.split(" ")
     return parsed;
   }
@@ -47,8 +47,15 @@ function App() {
 
   //when a user drops a piece
   function onDrop(source, target) {
+    //check to see if you have completed the puzzle
+    if (yourMoveNum >= yourMoves.length) {
+      root.render(
+        <h1>Good job</h1>
+      )
+      return
+    }
     rightSource = yourMoves[yourMoveNum].slice(0, 2)
-    rightDest = yourMoves[yourMoveNum].slice(2,4)
+    rightDest = yourMoves[yourMoveNum].slice(2, 4)
     console.log("drop")
     console.log(source)
     console.log(target)
@@ -59,40 +66,35 @@ function App() {
         puzzle.move(moves[moveNum])
         yourMoveNum++
         moveNum++;
-        puzzle.move(moves[moveNum])
-        moveNum++;
-        if(yourMoveNum >= yourMoves.length){
+          //if it is not the last move of the puzzle, play the other players move
+          puzzle.move(moves[moveNum])
           root.render(
-            <h1>Good job</h1>
-          )
-        }else{
-          root.render(
-          <div className="app">
-            <Chessboard position={puzzle.fen()} onPieceDrop={onDrop}/>
-          </div>)
-          return true;
-        }
+            <div className="app">
+              <Chessboard position={puzzle.fen()} onPieceDrop={onDrop} />
+            </div>)
+          moveNum++;
       }
     }
     console.log("wrong")
     return false
   }
 
-  function sleep(ms){
+  function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms))
   }
 
   async function initPuzzle() {
     await sleep(500)
     puzzle.move(moves[0])
-      root.render(
+    //render puzzle board after first init move
+    root.render(
       <div className="app">
-        <Chessboard position={puzzle.fen()} onPieceDrop={onDrop}/>
+        <Chessboard position={puzzle.fen()} onPieceDrop={onDrop} />
       </div>)
   }
   return (
     <div className="app">
-      <Chessboard position={puzzle.fen()} onPieceDrop={onDrop}/>
+      <Chessboard position={puzzle.fen()} onPieceDrop={onDrop} />
     </div>
   );
 }
