@@ -19,7 +19,7 @@ function App() {
   var rightDest;
   var rightSource;
 
-  var csv = "004JD,3r4/R7/2p5/p1P2p2/1p4k1/nP6/P2KNP2/8 w - - 3 41,d2e3 a3c2,1127,77,97,310,endgame mate mateIn1 oneMove,https://lichess.org/6vTeEc3x#81,"
+  var csv = "000Zo,4r3/1k6/pp3r2/1b2P2p/3R1p2/P1R2P2/1P4PP/6K1 w - - 0 35,e5f6 e8e1 g1f2 e1f1,1459,75,93,483,endgame mate mateIn2 short,https://lichess.org/n8Ff742v#69"
   var parsedCSV = parse(csv)
 
   const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -45,7 +45,6 @@ function App() {
   //init the puzzle by making the move before the puzzle starts
   initPuzzle()
   moveNum++; //a move is made by initPuzzle
-  yourMoveNum++;
 
   //when a user drops a piece
   function onDrop(source, target) {
@@ -71,9 +70,11 @@ function App() {
         }
         //if it is not the last move of the puzzle, play the other players move
         puzzle.move(moves[moveNum])
+        let startSquare = moves[moveNum].slice(0, 2)
+        let destSquare = moves[moveNum].slice(2, 4)
         root.render(
           <div className="app">
-            <Chessboard position={puzzle.fen()} onPieceDrop={onDrop} />
+            <Chessboard position={puzzle.fen()} onPieceDrop={onDrop} customArrows={[[startSquare, destSquare, "#093A3E"]]} customArrowColor="#093A3E" />
           </div>)
         moveNum++;
       }
@@ -90,10 +91,13 @@ function App() {
   async function initPuzzle() {
     await sleep(500)
     puzzle.move(moves[0])
-    //render puzzle board after first init move
+    //get the move start and destination square
+    let startSquare = moves[0].slice(0, 2)
+    let destSquare = moves[0].slice(2, 4)
+    //render puzzle board after first init move, with arrow showing move
     root.render(
       <div className="app">
-        <Chessboard position={puzzle.fen()} onPieceDrop={onDrop} />
+        <Chessboard position={puzzle.fen()} onPieceDrop={onDrop} customArrows={[[startSquare, destSquare, "#093A3E"]]} customArrowColor="#093A3E" />
       </div>)
   }
   return (
