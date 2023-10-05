@@ -12,17 +12,17 @@ import * as ReactDOM from 'react-dom/client';
 
 
 function App() {
-  var rightDest;
-  var rightSource;
   var fen = null;
-  var moves = null
+  var moves = null;
   var moveNum = 0;
   var yourMoveNum = 0;
+  var rightDest;
+  var rightSource;
+
   var csv = "004JD,3r4/R7/2p5/p1P2p2/1p4k1/nP6/P2KNP2/8 w - - 3 41,d2e3 a3c2,1127,77,97,310,endgame mate mateIn1 oneMove,https://lichess.org/6vTeEc3x#81,"
   var parsedCSV = parse(csv)
 
   const root = ReactDOM.createRoot(document.getElementById('root'));
-
 
   //get the starting fen from the parsed CSV
   fen = parsedCSV[0][1]
@@ -39,9 +39,11 @@ function App() {
 
   console.log(moves)
   //get every second move, ie your moves
-  let yourMoves = moves.filter((item, idx) => (idx + 1) % 2 !== 0);
+  var yourMoves = moves.filter((item, idx) => (idx + 1) % 2 !== 0);
   console.log(yourMoves)
 
+  //init the puzzle by making the move before the puzzle starts
+  initPuzzle()
 
   //when a user drops a piece
   function onDrop(source, target) {
@@ -67,16 +69,27 @@ function App() {
           root.render(
           <div className="app">
             <Chessboard position={puzzle.fen()} onPieceDrop={onDrop}/>
-          </div>
-          )
-          return true;}
-
+          </div>)
+          return true;
+        }
       }
     }
     console.log("wrong")
     return false
   }
 
+  function sleep(ms){
+    return new Promise(resolve => setTimeout(resolve, ms))
+  }
+
+  async function initPuzzle() {
+    await sleep(500)
+    puzzle.move(moves[0])
+      root.render(
+      <div className="app">
+        <Chessboard position={puzzle.fen()} onPieceDrop={onDrop}/>
+      </div>)
+  }
   return (
     <div className="app">
       <Chessboard position={puzzle.fen()} onPieceDrop={onDrop}/>
