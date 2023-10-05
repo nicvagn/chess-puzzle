@@ -14,8 +14,8 @@ import * as ReactDOM from 'react-dom/client';
 function App() {
   var fen = null;
   var moves = null;
-  var moveNum = 1; // = 1 b/c first move is made by initPuzzle
-  var yourMoveNum = 1;
+  var moveNum = 1; // = 1 because first move is made by initPuzzle
+  var yourMoveNum = 1; // ^^^
   var rightDest;
   var rightSource;
 
@@ -54,25 +54,23 @@ function App() {
       )
       return
     }
+    //parse and get the right answers
     rightSource = yourMoves[yourMoveNum].slice(0, 2)
     rightDest = yourMoves[yourMoveNum].slice(2, 4)
-    console.log("drop")
-    console.log(source)
-    console.log(target)
-    console.log(rightDest)
+
     if (source === rightSource) {
       console.log("right source")
       if (target === rightDest) {
         puzzle.move(moves[moveNum])
         yourMoveNum++
         moveNum++;
-          //if it is not the last move of the puzzle, play the other players move
-          puzzle.move(moves[moveNum])
-          root.render(
-            <div className="app">
-              <Chessboard position={puzzle.fen()} onPieceDrop={onDrop} />
-            </div>)
-          moveNum++;
+        //if it is not the last move of the puzzle, play the other players move
+        puzzle.move(moves[moveNum])
+        root.render(
+          <div className="app">
+            <Chessboard position={puzzle.fen()} onPieceDrop={onDrop} />
+          </div>)
+        moveNum++;
       }
     }
     console.log("wrong")
@@ -83,6 +81,7 @@ function App() {
     return new Promise(resolve => setTimeout(resolve, ms))
   }
 
+  //initialize the chess puzzle
   async function initPuzzle() {
     await sleep(500)
     puzzle.move(moves[0])
