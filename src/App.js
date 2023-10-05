@@ -14,8 +14,8 @@ import * as ReactDOM from 'react-dom/client';
 function App() {
   var fen = null;
   var moves = null;
-  var moveNum = 1; // = 1 because first move is made by initPuzzle
-  var yourMoveNum = 1; // ^^^
+  var moveNum = 0;
+  var yourMoveNum = 0;
   var rightDest;
   var rightSource;
 
@@ -38,25 +38,23 @@ function App() {
   }
 
   console.log(moves)
-  //get every second move, ie your moves
-  var yourMoves = moves.filter((item, idx) => (idx + 1) % 2 !== 0);
+  //get every second move, ie your moves. The first move is the move that leads into the puzzle
+  var yourMoves = moves.filter((item, idx) => (idx + 1) % 2 === 0);
   console.log(yourMoves)
 
   //init the puzzle by making the move before the puzzle starts
   initPuzzle()
+  moveNum++; //a move is made by initPuzzle
+  yourMoveNum++;
 
   //when a user drops a piece
   function onDrop(source, target) {
-    //check to see if you have completed the puzzle
-    if (yourMoveNum >= yourMoves.length) {
-      root.render(
-        <h1>Good job</h1>
-      )
-      return
-    }
+
     //parse and get the right answers
-    rightSource = yourMoves[yourMoveNum].slice(0, 2)
-    rightDest = yourMoves[yourMoveNum].slice(2, 4)
+    rightSource = moves[moveNum].slice(0, 2)
+    rightDest = moves[moveNum].slice(2, 4)
+
+    console.log("yourmoves[yourmovenumber]" + yourMoves[yourMoveNum])
 
     if (source === rightSource) {
       console.log("right source")
@@ -64,6 +62,13 @@ function App() {
         puzzle.move(moves[moveNum])
         yourMoveNum++
         moveNum++;
+        //check to see if you have completed the puzzle
+        if (yourMoveNum >= yourMoves.length) {
+          root.render(
+            <h1>Good job</h1>
+          )
+          return
+        }
         //if it is not the last move of the puzzle, play the other players move
         puzzle.move(moves[moveNum])
         root.render(
