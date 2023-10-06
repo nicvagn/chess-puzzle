@@ -19,7 +19,13 @@ function App() {
   var rightDest;
   var rightSource;
 
-  var csv = "000Zo,4r3/1k6/pp3r2/1b2P2p/3R1p2/P1R2P2/1P4PP/6K1 w - - 0 35,e5f6 e8e1 g1f2 e1f1,1459,75,93,483,endgame mate mateIn2 short,https://lichess.org/n8Ff742v#69"
+  readCSV();
+  var reader = new FileReader();
+  var csvFile = fetch("/home/nrv/dev/chess-puzzle/test.csv");
+  console.log(csvFile.text);
+
+  // test csv - var csv = "000Zo,4r3/1k6/pp3r2/1b2P2p/3R1p2/P1R2P2/1P4PP/6K1 w - - 0 35,e5f6 e8e1 g1f2 e1f1,1459,75,93,483,endgame mate mateIn2 short,https://lichess.org/n8Ff742v#69"
+  var csv = reader.readAsText(csvFile);
   var parsedCSV = parse(csv)
 
   const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -72,11 +78,13 @@ function App() {
         puzzle.move(moves[moveNum])
         let startSquare = moves[moveNum].slice(0, 2)
         let destSquare = moves[moveNum].slice(2, 4)
+        moveNum++;
+
+        //render chess board with arrow for there best response
         root.render(
           <div className="app">
             <Chessboard position={puzzle.fen()} onPieceDrop={onDrop} customArrows={[[startSquare, destSquare, "#093A3E"]]} customArrowColor="#093A3E" />
           </div>)
-        moveNum++;
       }
     }
     console.log("wrong")
@@ -100,6 +108,10 @@ function App() {
         <Chessboard position={puzzle.fen()} onPieceDrop={onDrop} customArrows={[[startSquare, destSquare, "#093A3E"]]} customArrowColor="#093A3E" />
       </div>)
   }
+  async function loadCSV() {
+    
+  }
+
   return (
     <div className="app">
       <Chessboard position={puzzle.fen()} onPieceDrop={onDrop} />
